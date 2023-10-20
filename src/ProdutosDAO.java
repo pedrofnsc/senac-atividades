@@ -17,17 +17,37 @@ import java.util.ArrayList;
 
 public class ProdutosDAO {
     
-    Connection conn;
+    public ProdutosDAO() {
+        this.con = new conectaDAO().connectDB();
+    }
+    Connection con;
     PreparedStatement prep;
     ResultSet resultset;
     ArrayList<ProdutosDTO> listagem = new ArrayList<>();
     
-    public void cadastrarProduto (ProdutosDTO produto){
+    public void cadastrarProduto (ProdutosDTO produto){        
         
+        String sql = "insert into produtos(nome, valor, status)" + "values(?,?,?);";
+
         
-        //conn = new conectaDAO().connectDB();
-        
-        
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            
+            ps.setString(1, produto.getNome());
+            
+            ps.setInt(2, produto.getValor());
+            // ...
+            ps.setString(3, produto.getStatus());
+            
+            
+            ps.execute();
+            ps.close();
+            JOptionPane.showMessageDialog(null, "O produto foi cadastrado com sucesso!");
+        } 
+            catch (Exception e)
+            {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "ERRO. O produto não foi cadastrado!");
+            }
     }
     
     public ArrayList<ProdutosDTO> listarProdutos(){
