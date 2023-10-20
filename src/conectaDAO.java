@@ -22,7 +22,6 @@ public class conectaDAO {
         try {
         
             Connection conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3307/leiloada", "root", "123456");
-            System.out.println("CONECTOOOOOOU");
             return conn;
             
         } catch (SQLException erro){
