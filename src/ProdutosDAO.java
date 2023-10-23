@@ -59,7 +59,7 @@ public class ProdutosDAO {
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 ProdutosDTO p = new ProdutosDTO();
-                p.setId(rs.getInt("id")); // Se a tabela possui uma coluna "id"
+                p.setId(rs.getInt("id"));
                 p.setNome(rs.getString("nome"));
                 p.setValor(rs.getInt("valor"));
                 p.setStatus(rs.getString("status"));
@@ -70,5 +70,41 @@ public class ProdutosDAO {
         }
         return listagem;
     }
+    
+    public ArrayList<ProdutosDTO> listarProdutosVendidos(){
+        
+        String sql = "SELECT * FROM produtos WHERE status = 'Vendido'";
+            
+        ArrayList<ProdutosDTO> listagem = new ArrayList<>();
+        
+        try (PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                ProdutosDTO p = new ProdutosDTO();
+                p.setId(rs.getInt("id"));
+                p.setNome(rs.getString("nome"));
+                p.setValor(rs.getInt("valor"));
+                p.setStatus(rs.getString("status"));
+                listagem.add(p);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return listagem;
+    }
+    
+    public void venderProduto(int produtoId) {
+        String sql = "UPDATE produtos SET status = 'Vendido' WHERE id = ?";
+        
+        try (PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setInt(1, produtoId);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "ERRO");
+        }
+    }
+    
+    
 }
 
